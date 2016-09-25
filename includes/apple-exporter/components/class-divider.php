@@ -31,7 +31,15 @@ class Divider extends Component {
 	 * @access protected
 	 */
 	protected function build( $text ) {
+
+
 		$this->json = array(
+			'role' => 'divider',
+			'layout' 		=> array( 'ignoreDocumentMargin' => true ),
+			'stroke' 		=> array( 'color' => '#AE8932', 'width' => 3 )
+		);
+
+	/*	$this->json = array(
 			'role'   => 'divider',
 			'layout' => 'divider-layout',
 			'stroke' => array( 'color' => '#E6E6E6', 'width' => 1 ),
@@ -40,6 +48,7 @@ class Divider extends Component {
 		$this->register_full_width_layout( 'divider-layout', array(
 			'margin' => array( 'top' => 25, 'bottom' => 25 )
 		) );
+	*/
 	}
 
 }

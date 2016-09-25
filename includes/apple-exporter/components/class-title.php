@@ -10,13 +10,21 @@ class Title extends Component {
 	 * @access protected
 	 */
 	protected function build( $text ) {
+	    if ($this->get_setting( 'header_all_caps' ) == 'yes')
+                $text = strtoupper($text);
 		$this->json = array(
 			'role' => 'title',
 			'text' => $text,
-		);
+            'layout' => array (
+                'margin' => array (
+                    'top' => intval( $this->get_setting( 'header_top_margin' ) ),
+                    'bottom' => intval( $this->get_setting( 'header_bottom_margin' ) )
+           )
+            )
+            );
 
 		$this->set_style();
-		$this->set_layout();
+		//$this->set_layout();
 	}
 
 	/**
@@ -28,10 +36,10 @@ class Title extends Component {
 		$this->json[ 'textStyle' ] = 'default-title';
 		$this->register_style( 'default-title', array(
 			'fontName'      => $this->get_setting( 'header_font' ),
-			'fontSize'      => intval( $this->get_setting( 'header1_size' ) ),
+			'fontSize'      => intval( $this->get_setting( 'header_size' ) ),
 			'lineHeight'    => intval( $this->get_setting( 'header_line_height' ) ),
 			'textColor'     => $this->get_setting( 'header_color' ),
-			'textAlignment' => $this->find_text_alignment(),
+			'textAlignment' => $this->get_setting( 'header_alignment')
 		) );
 	}
 
@@ -44,11 +52,11 @@ class Title extends Component {
 		$this->json[ 'layout' ] = 'title-layout';
 		$this->register_layout( 'title-layout', array(
       'margin' => array(
-        'top' => 30,
-        'bottom' => 0,
+        'bottom' => 5,
       ),
 		) );
 	}
+//'top' => 30,
 
 }
 

@@ -44,7 +44,12 @@ class Metadata extends Builder {
 			$meta['dateCreated'] = $post_date;
 			$meta['dateModified'] = $post_modified;
 			$meta['datePublished'] = $post_date;
-		}
+			//$meta['authors'] = $post->authors();
+            //\scbAdminPage::_pages_init();
+
+
+
+        }
 
 		// Add canonical URL.
 		$meta['canonicalURL'] = get_permalink( $this->content_id() );

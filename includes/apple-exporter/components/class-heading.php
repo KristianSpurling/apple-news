@@ -74,15 +74,27 @@ class Heading extends Component {
 		// *: No markdown because the apple format doesn't support markdown with
 		// textStyle in headings.
 		$text = wp_strip_all_tags( $matches[2] );
-
-		$this->json = array(
-			'role'   => 'heading' . $level,
-			'text'   => trim( $this->markdown->parse( $text ) ),
-			'format' => 'markdown',
-		);
+        if ($level == 6) {
+            $this->json = array(
+                'role' => 'quote',
+                'text' => trim($this->markdown->parse($text)),
+                'format' => 'markdown',
+                'animation' => array(
+                    'type' => 'move_in',
+                    'preferredStartingPosition' => 'left',
+            ),
+        );
+        }
+        else
+        {$this->json = array(
+            'role'   => 'heading' . $level,
+            'text'   => trim( $this->markdown->parse( $text ) ),
+            'format' => 'markdown',
+        );
+        }
 
 		$this->set_style( $level );
-		$this->set_layout();
+		$this->set_layout($level);
 	}
 
 	/**
@@ -90,10 +102,10 @@ class Heading extends Component {
 	 *
 	 * @access private
 	 */
-	private function set_layout() {
-		$this->json['layout'] = 'heading-layout';
-		$this->register_full_width_layout( 'heading-layout', array(
-			'margin' => array( 'top' => 15, 'bottom' => 15 ),
+	private function set_layout($level) {
+		$this->json['layout'] = 'heading-layout' . $level;
+		$this->register_full_width_layout( 'heading-layout' . $level, array(
+			'margin' => array( 'top' => $this->get_setting( 'heading' . $level . '_top_margin' ), 'bottom' => $this->get_setting( 'heading' . $level . '_bottom_margin' ) ),
 		) );
 	}
 
@@ -103,15 +115,17 @@ class Heading extends Component {
 	 * @access private
 	 */
 	private function set_style( $level ) {
-		$this->json[ 'textStyle' ] = 'default-heading-' . $level;
-		$this->register_style( 'default-heading-' . $level, array(
-			'fontName'      => $this->get_setting( 'header_font' ),
-			'fontSize'      => intval( $this->get_setting( 'header' . $level . '_size' ) ),
-			'lineHeight'    => intval( $this->get_setting( 'header_line_height' ) ),
-			'textColor'     => $this->get_setting( 'header_color' ),
-			'textAlignment' => $this->find_text_alignment(),
-		) );
-	}
+		$this->json[ 'textStyle' ] = 'default-heading' . $level;
+		$this->register_style( 'default-heading' . $level, array(
+			'fontName'      => $this->get_setting( 'heading' . $level . '_font' ),
+			'fontSize'      => intval( $this->get_setting( 'heading' . $level .'_size' ) ),
+			'lineHeight'    => intval( $this->get_setting( 'heading' . $level . '_line_height' ) ),
+			'textColor'     => $this->get_setting( 'heading' . $level . '_color' ),
+            'border'        => array('all' => array('width' => 2), 'left' => false, 'right' => false)
+        )
+    );
+        }
 
+//'textAlignment' => $this->find_text_alignment(),
 }
 

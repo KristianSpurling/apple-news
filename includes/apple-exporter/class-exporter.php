@@ -77,11 +77,11 @@ class Exporter {
 		if ( $builders ) {
 			$this->builders = $builders;
 		} else {
+			$this->register_builder( 'metadata'           	, new Builders\Metadata( $this->content, $this->settings ) );
 			$this->register_builder( 'layout'             	, new Builders\Layout( $this->content, $this->settings ) );
 			$this->register_builder( 'components'						, new Builders\Components( $this->content, $this->settings ) );
 			$this->register_builder( 'componentTextStyles'	, new Builders\Component_Text_Styles( $this->content, $this->settings ) );
 			$this->register_builder( 'componentLayouts'   	, new Builders\Component_Layouts( $this->content, $this->settings ) );
-			$this->register_builder( 'metadata'           	, new Builders\Metadata( $this->content, $this->settings ) );
 			$this->register_builder( 'advertisingSettings'	, new Builders\Advertising_Settings( $this->content, $this->settings ) );
 		}
 
@@ -157,13 +157,95 @@ class Exporter {
 
 		// Some use cases for this function expect it to return the JSON.
 		$json = $this->get_json();
-
+		//$zipname = $this->get_zip();
 		// Clean after the export action.
 		$this->clean_workspace();
 
 		return $json;
 	}
 
+	private function get_zip()
+	{
+		// Get real path for our folder
+		$rootPath = realpath(plugin_dir_path( __FILE__ ) . 'zipincludes');
+
+		$zipname = $this->content_id() . '.zip';
+
+// Initialize archive object
+		$zip = new \ZipArchive();
+
+
+		$zip->open($zipname, \ZipArchive::CREATE | \ZipArchive::OVERWRITE);
+
+// Create recursive directory iterator
+		/** @var SplFileInfo[] $files */
+		$files = new \RecursiveIteratorIterator(
+			new \RecursiveDirectoryIterator($rootPath),
+			\RecursiveIteratorIterator::LEAVES_ONLY
+		);
+		$json = $this->get_json();
+		foreach ($files as $name => $file)
+		{
+			// Skip directories (they would be added automatically)
+			if (!$file->isDir())
+			{
+				// Get real and relative path for current file
+				$filePath = $file->getRealPath();
+				$relativePath = substr($filePath, strlen($rootPath) + 1);
+
+				// Add current file to archive
+				$zip->addFile($filePath, $relativePath);
+			//	$json .= ":" . $filePath ."  :  " . $relativePath;
+			}
+		}
+
+		foreach ( $this->get_bundles() as $bundle ) {
+
+			$path = parse_url($bundle, PHP_URL_PATH);
+
+//To get the dir, use: dirname($path)
+
+		//	echo $_SERVER['DOCUMENT_ROOT'] . $path;
+			$filename = $_SERVER['DOCUMENT_ROOT'] . $path; //p_upload_dir()['path'] . "/" . basename($bundle);
+			$zip->addFile($filename , basename($bundle) );
+		//	$json .= ":" . $filename ."  :  " . $bundle;
+		}
+
+		$zip->addFromString('article.json',$json );
+
+
+// Zip archive will be created only after closing object
+		$zip->close();
+		return $zipname;
+	}
+
+	private function get_zip_old()
+	{
+		$zipname = $this->content_id() . '.zip';
+		$zip = new \ZipArchive();
+		$zip->open($zipname, \ZipArchive::CREATE);
+		$json = $this->get_json();
+		$zip->addFromString('article.json',$json . "|" . wp_upload_dir()['path'] . "|" . plugin_dir_path( __FILE__ ));
+
+		foreach ( $this->get_bundles() as $bundle ) {
+			$filename = wp_upload_dir()['path'] . "/" . basename($bundle);
+			$zip->addFile($bundle );
+		}
+		$curdir = get_plugin_dir() . 'zipincludes';
+		if ($handle = opendir( plugin_dir_path( __FILE__ ) . 'zipincludes/')) {
+			while (false !== ($entry = readdir($handle))) {
+				if ($entry != "." && $entry != ".." && !strstr($entry, '.php')) {
+					$zip->addFile($entry);
+				}
+			}
+			closedir($handle);
+		}
+
+		$zip->close();
+		return $zipname;
+
+
+	}
 	/**
 	 * Generate article.json contents. It does so by looping though all data,
 	 * generating valid JSON and adding attachments to workspace/tmp directory.
@@ -174,14 +256,14 @@ class Exporter {
 	private function generate_json() {
 		// Base JSON
 		$json = array(
-			'version'    => '1.1',
+			'version'    => '1.2',
 			'identifier' => 'post-' . $this->content_id(),
 			'language'   => 'en',
 			'title'      => $this->content_title(),
 		);
 
 		// Builders
-		$json['documentStyle'] = $this->build_article_style();
+		//$json['documentStyle'] = $this->build_article_style();
 		foreach ( $this->builders as $name => $builder ) {
 			$arr = $builder->to_array();
 			if ( $arr ) {

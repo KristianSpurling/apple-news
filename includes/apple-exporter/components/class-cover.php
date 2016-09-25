@@ -14,6 +14,13 @@ use \Apple_Exporter\Exporter as Exporter;
  * @since 0.2.0
  */
 class Cover extends Component {
+    public static function node_matches( $node ) {
+        if ( self::node_has_class( $node, 'cover' ) ) {
+            return $node;
+        }
+
+        return null;
+    }
 
 	/**
 	 * Build the component.
@@ -21,8 +28,12 @@ class Cover extends Component {
 	 * @param string $text
 	 * @access protected
 	 */
-	protected function build( $url ) {
-		$this->json = array(
+	protected function build( $text ) {
+        preg_match( '/src="([^"]*?)"/im', $text, $matches );
+        $url      = esc_url_raw( apply_filters( 'apple_news_build_image_src', $matches[1], $text ) );
+        $filename = preg_replace( '/\\?.*/', '', \Apple_News::get_filename( $url ) );
+        //preg_match( '/src="([^"]*?)"/im', $text, $matches );
+        $this->json = array(
 			'role' 			=> 'header',
 			'layout' 		=> 'headerPhotoLayout',
 			'components' 	=> array( array(
@@ -37,6 +48,7 @@ class Cover extends Component {
 		);
 
 		$this->set_default_layout();
+
 	}
 
 	/**
@@ -48,13 +60,13 @@ class Cover extends Component {
 		$this->register_full_width_layout( 'headerPhotoLayout', array(
 			'ignoreDocumentMargin' => true,
 			'columnStart' => 0,
-			'columnSpan' => 7,
+			'columnSpan' => 11,
 		) );
 
 		$this->register_full_width_layout( 'headerBelowTextPhotoLayout', array(
 			'ignoreDocumentMargin' => true,
 			'columnStart' => 0,
-			'columnSpan' => 7,
+			'columnSpan' => 11,
 			'margin' => array(
 				'top' => 30,
 				'bottom' => 0,

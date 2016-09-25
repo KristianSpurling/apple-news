@@ -178,7 +178,7 @@ class Components extends Builder {
 					'role' => 'container',
 					'layout' => array(
 						'columnStart' => 0,
-						'columnSpan' => 7,
+						'columnSpan' => 11,
 						'ignoreDocumentMargin' => true,
 					),
 					'style' => array(
@@ -203,21 +203,55 @@ class Components extends Builder {
 	 */
 	private function meta_components() {
 		$components = array();
-
+		$post = get_post($this->content_id());
+		$maincontent_built = false;
 		// Get the component order
 		$meta_component_order = $this->get_setting( 'meta_component_order' );
 		if ( ! empty( $meta_component_order ) && is_array( $meta_component_order ) ) {
+			$pf = get_post_format($post->ID);
 			foreach ( $meta_component_order as $i => $component ) {
-				$method = 'content_' . $component;
-				if ( method_exists( $this, $method ) && $this->$method() ) {
-					$component = $this->get_component_from_shortname( $component, $this->$method() )->to_array();
+				if (strtolower( $component ) == 'logo')
+				{
 
-					// Cover needs different margins when it's not first
-					if ( 'header' === $component['role'] && 0 !== $i ) {
-						$component['layout'] = 'headerBelowTextPhotoLayout';
+				}
+				else {
+					$method = 'content_' . $component;
+					if (strtolower($component) == 'divider') {
+						$component = $this->get_component_from_shortname(strtolower($component), 'divider')->to_array();
+						$components[] = $component;
+					} else if (strtolower($component) == 'gallery') {
+
+						//if ($pf == 'gallery') {
+						//	$component = $this->get_component_from_shortname(strtolower($component), 'gallery')->to_array();
+					//		$components[] = $component;
+				//			$maincontent_built = true;
+				//		}
+					} else if (strtolower($component) == 'video' && $maincontent_built == false) {
+						if ($pf == 'video') {
+							//We could put normal cover/video
+							//$component = $this->get_component_from_shortname(strtolower($component), 'cover')->to_array();
+							//$components[] = $component;
+				//			$maincontent_built = true;
+						}
+
+					} else if (strtolower($component) == 'cover' && $maincontent_built == false) {
+						//We could put normal cover/video
+				//		$component = $this->get_component_from_shortname(strtolower($component), 'cover')->to_array();
+				//		$components[] = $component;
+
+					} else {
+						if (method_exists($this, $method) && $this->$method()) {
+							$component = $this->get_component_from_shortname($component, $this->$method())->to_array();
+
+							// Cover needs different margins when it's not first
+							if ('header' === $component['role'] && 0 !== $i) {
+								$component['layout'] = 'headerBelowTextPhotoLayout';
+							}
+							$components[] = $component;
+						} else {
+
+						}
 					}
-
-					$components[] = $component;
 				}
 			}
 		}
