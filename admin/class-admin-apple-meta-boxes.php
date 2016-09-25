@@ -34,7 +34,7 @@ class Admin_Apple_Meta_Boxes extends Apple_News {
 		// Register hooks if enabled
 		if ( 'yes' == $settings->get( 'show_metabox' ) ) {
 			// Handle a publish action and saving fields
-			add_action( 'save_post', array( $this, 'do_publish' ), 10, 2 );
+				add_action( 'save_post', array( $this, 'do_publish' ), 10, 2 );
 
 			// Add the custom meta boxes to each post type
 			$post_types = $settings->get( 'post_types' );
@@ -77,8 +77,8 @@ class Admin_Apple_Meta_Boxes extends Apple_News {
 
 		// If this is set to autosync or no action is set, we're done here
 		if ( 'yes' == $this->settings->get( 'api_autosync' )
-			|| 'publish' != $post->post_status
-			|| empty( $_POST['apple_news_publish_action'] )
+		     || 'publish' != $post->post_status
+		     || empty( $_POST['apple_news_publish_action'] )
 			|| $this->publish_action != $_POST['apple_news_publish_action'] ) {
 			return;
 		}

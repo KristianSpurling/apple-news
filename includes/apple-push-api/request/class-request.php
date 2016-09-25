@@ -93,7 +93,9 @@ class Request {
 
 		// Allow filtering and merge with the default args
 		$args = apply_filters( 'apple_news_post_args', wp_parse_args( $args, $this->default_args ) );
-
+//            $myfile = fopen("applenewsdebug.txt", "w") or die("Unable to open file!");
+   ///         fwrite($myfile, serialize($args) );
+ //           fclose($myfile);
 		// Perform the request
 		$response = wp_safe_remote_post( esc_url_raw( $url ), $args );
 
@@ -255,13 +257,15 @@ class Request {
 				}
 
 				// Add the code, message and keyPath
-				$messages[] = sprintf(
-					'%s%s%s%s',
-					$error->code,
-					( ! empty( $error->message ) ) ? ' - ' : '',
-					$error->message,
-					$key_path
-				);
+                if (!empty($error->message)) {
+                    $messages[] = sprintf(
+                        '%s%s%s%s',
+                        $error->code,
+                        ( ! empty( $error->message ) ) ? ' - ' : '',
+                        $error->message,
+                        $key_path
+                    );
+                }
 			}
 
 			if ( ! empty( $messages ) ) {
@@ -289,6 +293,7 @@ class Request {
 	private function build_content( $article, $bundles = array(), $meta = array() ) {
 		$bundles = array_unique( $bundles );
 		$content = '';
+		$rootPath = realpath(plugin_dir_path( __FILE__ ) . 'zipincludes');
 
 		// Add custom meta for request.
 		$meta = apply_filters( 'apple_news_api_post_meta', $meta );
@@ -301,6 +306,29 @@ class Request {
 		foreach ( $bundles as $bundle ) {
 			$content .= $this->mime_builder->add_content_from_file( $bundle );
 		}
+
+
+		/*$files = new \RecursiveIteratorIterator(
+			new \RecursiveDirectoryIterator($rootPath),
+			\RecursiveIteratorIterator::LEAVES_ONLY
+		);
+
+		foreach ($files as $name => $file)
+		{
+			// Skip directories (they would be added automatically)
+			if (!$file->isDir())
+			{
+				// Get real and relative path for current file
+				$filePath = $file->getRealPath();
+			//	$relativePath = substr($filePath, strlen($rootPath) + 1);
+
+				// Add current file to archive
+			//	$zip->addFile($filePath, $relativePath);
+				//	$json .= ":" . $filePath ."  :  " . $relativePath;
+
+				$content .= $this->mime_builder->add_content_from_file( $filePath);
+			}
+		}*/
 		$content .= $this->mime_builder->close();
 
 		return $content;

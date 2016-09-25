@@ -105,6 +105,15 @@ abstract class Builder {
 	protected function content_cover() {
 		return $this->content->cover();
 	}
+	protected function content_breadcrumbcover() {
+		return $this->content->breadcrumbcover();
+	}
+	protected function content_gallery() {
+		return $this->content->galleryr();
+	}
+	protected function content_logo(){
+		return $this->content->logo();
+	}
 
 	/**
 	 * Gets a content setting.

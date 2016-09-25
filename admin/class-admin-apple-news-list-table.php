@@ -20,7 +20,7 @@ class Admin_Apple_News_List_Table extends WP_List_Table {
 	 * @var int
 	 * @since 0.4.0
 	 */
-	public $per_page = 20;
+	public $per_page = 100;
 
 	/**
 	 * Current settings.
@@ -60,6 +60,11 @@ class Admin_Apple_News_List_Table extends WP_List_Table {
 			case 'title':
 				$default = $item[ $column_name ];
 				break;
+
+			case 'type':
+				$default = $this->get_the_post_formst($item);
+				break;
+
 			case 'updated_at':
 				$default = $this->get_updated_at( $item );
 				break;
@@ -91,6 +96,17 @@ class Admin_Apple_News_List_Table extends WP_List_Table {
 		return __( 'Never', 'apple-news' );
 	}
 
+	private function get_the_post_formst( $post ) {
+		if ($post)
+		{
+			$post_format = get_post_format($post->ID);
+			if ($post_format) return ucfirst($post_format);
+			return 'Post';
+		}
+		else {
+			return 'Unknown';
+		}
+	}
 	/**
 	 * Get the Apple News status.
 	 *
@@ -232,6 +248,7 @@ class Admin_Apple_News_List_Table extends WP_List_Table {
 		return apply_filters( 'apple_news_export_list_columns', array(
 			'cb'					=> '<input type="checkbox">',
 			'title'				=> __( 'Title', 'apple-news' ),
+			'type'				=> __( 'Type', 'apple-news' ),
 			'updated_at'	=> __( 'Last updated at', 'apple-news' ),
 			'status'			=> __( 'Apple News Status', 'apple-news' ),
 			'sync'				=> __( 'Sync Status', 'apple-news' ),

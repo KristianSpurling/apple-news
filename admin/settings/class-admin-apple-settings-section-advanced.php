@@ -41,6 +41,36 @@ class Admin_Apple_Settings_Section_Advanced extends Admin_Apple_Settings_Section
 				'type'    => 'float',
 				'sanitize' => 'floatval',
 			),
+			'heading1_line_height' => array(
+				'label'   => __( 'Heading1 Line Height', 'apple-news' ),
+				'type'    => 'float',
+				'sanitize' => 'floatval',
+			),
+			'headimg2_line_height' => array(
+				'label'   => __( 'Heading2 Line Height', 'apple-news' ),
+				'type'    => 'float',
+				'sanitize' => 'floatval',
+			),
+            'headimg3_line_height' => array(
+                'label'   => __( 'Heading3 Line Height', 'apple-news' ),
+                'type'    => 'float',
+                'sanitize' => 'floatval',
+            ),
+            'headimg4_line_height' => array(
+                'label'   => __( 'Heading4 Line Height', 'apple-news' ),
+                'type'    => 'float',
+                'sanitize' => 'floatval',
+            ),
+            'headimg5_line_height' => array(
+                'label'   => __( 'Heading5 Line Height', 'apple-news' ),
+                'type'    => 'float',
+                'sanitize' => 'floatval',
+            ),
+            'headimg6_line_height' => array(
+                'label'   => __( 'Heading6 Line Height', 'apple-news' ),
+                'type'    => 'float',
+                'sanitize' => 'floatval',
+            ),
 			'component_alerts' => array(
 				'label'   => __( 'Component Alerts', 'apple-news' ),
 				'type'    => array( 'none', 'warn', 'fail' ),
@@ -57,7 +87,7 @@ class Admin_Apple_Settings_Section_Advanced extends Admin_Apple_Settings_Section
 		$this->groups = array(
 			'line_heights' => array(
 				'label'       => __( 'Line Heights', 'apple-news' ),
-				'settings'    => array( 'body_line_height', 'pullquote_line_height', 'header_line_height' ),
+				'settings'    => array( 'body_line_height', 'pullquote_line_height', 'header_line_height',  'heading1_line_height', 'headimg2_line_height', 'headimg3_line_height', 'headimg4_line_height', 'headimg5_line_height', 'headimg6_line_height' ),
 			),
 			'alerts' => array(
 				'label'       => __( 'Alerts', 'apple-news' ),

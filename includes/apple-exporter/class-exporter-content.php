@@ -49,6 +49,11 @@ class Exporter_Content {
 	 */
 	private $cover;
 
+	private $breadcrumbcover;
+
+	private $gallery;
+	private $logo;
+
 	/**
 	 * Byline for the content being exported.
 	 *
@@ -76,12 +81,15 @@ class Exporter_Content {
 	 * @param string $byline
 	 * @param Settings $settings
 	 */
-	function __construct( $id, $title, $content, $intro = null, $cover = null, $byline = null, $settings = null ) {
+	function __construct( $id, $title, $content, $intro = null, $cover = null, $breadcrumbcover = null, $gallery = null, $logo = null, $byline = null, $settings = null ) {
 		$this->id       = $id;
 		$this->title    = $title;
 		$this->content  = $content;
 		$this->intro    = $intro;
 		$this->cover    = $cover;
+		$this->breadcrumbcover = $breadcrumbcover;
+		$this->gallery    = $gallery;
+		$this->logo = $logo;
 		$this->byline   = $byline;
 		$this->settings = $settings ?: new Exporter_Content_Settings();
 	}
@@ -136,6 +144,9 @@ class Exporter_Content {
 		return $this->cover;
 	}
 
+	public function breadcrumbcover(){
+		return $this->breadcrumbcover;
+	}
 	/**
 	 * Get the content byline.
 	 *
@@ -145,6 +156,14 @@ class Exporter_Content {
 	public function byline() {
 		return $this->byline;
 	}
+	public function gallery() {
+		return $this->gallery;
+	}
+
+public function logo(){
+		return $this->logo;
+}
+
 
 	/**
 	 * Get the content settings.

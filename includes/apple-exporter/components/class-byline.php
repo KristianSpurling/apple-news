@@ -10,6 +10,14 @@ use \Apple_Exporter\Exporter as Exporter;
  */
 class Byline extends Component {
 
+
+    public static function node_matches( $node ) {
+        if ( self::node_has_class( $node, 'byline' ) ) {
+            return $node;
+        }
+
+        return null;
+    }
 	/**
 	 * Build the component.
 	 *
@@ -17,13 +25,29 @@ class Byline extends Component {
 	 * @access protected
 	 */
 	protected function build( $text ) {
+
+		//$filename = preg_replace( '/\\?.*/', '', \Apple_News::get_filename( $text ) );
+		/*$this->json = array(
+			'role' => 'logo',
+			'URL'  => $this->maybe_bundle_source( $text, $filename ),
+			'layout' 		=> array('horizontalContentAlignment' => 'left',
+				'maximumContentWidth' => 100,
+				'columnStart' => 0,
+				'columnSpan' => 2,
+				'margin' => 20),
+		);*/
+
 		$this->json = array(
 			'role' => 'byline',
+			'format' => 'markdown',
 			'text' => $text,
-		);
+			'layout' 		=> array(
+									'ignoreDocumentGutter' => 'left',
+									'margin' => $this->get_setting( 'byline_margin' )),
+			);
 
 		$this->set_default_style();
-		$this->set_default_layout();
+		//$this->set_default_layout();
 	}
 
 	/**
@@ -34,11 +58,12 @@ class Byline extends Component {
 	private function set_default_style() {
 		$this->json[ 'textStyle' ] = 'default-byline';
 		$this->register_style( 'default-byline', array(
-			'textAlignment' => $this->find_text_alignment(),
 			'fontName'      => $this->get_setting( 'byline_font' ),
 			'fontSize'      => intval( $this->get_setting( 'byline_size' ) ),
 			'textColor'     => $this->get_setting( 'byline_color' ),
+            'textAlignment' => $this->get_setting( 'byline_alignment' )
 		) );
+        //	'textAlignment' => $this->find_text_alignment(),
 	}
 
 	/**
@@ -46,7 +71,7 @@ class Byline extends Component {
 	 *
 	 * @access private
 	 */
-	private function set_default_layout() {
+/*	private function set_default_layout() {
 		$this->json[ 'layout' ] = 'byline-layout';
 		$this->register_full_width_layout( 'byline-layout', array(
 			'margin' => array(
@@ -55,6 +80,6 @@ class Byline extends Component {
 			),
 		) );
 	}
-
+*/
 }
 

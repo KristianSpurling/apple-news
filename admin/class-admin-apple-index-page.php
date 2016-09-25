@@ -228,7 +228,21 @@ class Admin_Apple_Index_Page extends Apple_News {
 	private function get_setting( $name ) {
 		return $this->settings->get( $name );
 	}
-
+	/**
+	 * Downloads the zip file for troubleshooting purposes.
+	 *
+	 * @param string $json
+	 * @param int $id
+	 * @access private
+	 */
+	private function download_zip( $zip, $id ) {
+		header('Content-Type: application/zip');
+		header("Content-Disposition: attachment; filename='" . $zip . "'");
+		header('Content-Length: ' . filesize($zip));
+		header("Location: " . $zip 	);
+		readfile($zip);
+		die();
+	}
 	/**
 	 * Downloads the JSON file for troubleshooting purposes.
 	 *
@@ -285,8 +299,11 @@ class Admin_Apple_Index_Page extends Apple_News {
 	public function export_action( $id ) {
 		$export = new Apple_Actions\Index\Export( $this->settings, $id );
 		try {
+			//$zipname = $export->perform();
 			$json = $export->perform();
 			$this->download_json( $json, $id );
+			//$this->download_zip( $zipname, $id );
+
 		} catch ( Apple_Actions\Action_Exception $e ) {
 			$this->notice_error( $e->getMessage() );
 		}

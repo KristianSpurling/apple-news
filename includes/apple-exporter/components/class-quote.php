@@ -73,8 +73,8 @@ class Quote extends Component {
 	private function set_layout() {
 		$this->register_layout( 'quote-layout', array(
 			'margin' => array(
-				'top' => 12,
-				'bottom' => 12,
+				'top' => intval( $this->get_setting( 'pullquote_top_margin' ) ),
+				'bottom' =>  intval( $this->get_setting( 'pullquote__bottom_margin' ) ),
 			),
 		) );
 	}

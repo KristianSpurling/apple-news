@@ -153,8 +153,8 @@ class Body extends Component {
 			'columnStart' => $this->get_col_start(),
 			'columnSpan'  => $this->get_setting( 'body_column_span' ),
 			'margin'      => array(
-				'top' => 12,
-				'bottom' => 12
+				'top' =>  intval( $this->get_setting( 'body_top_margin' )),
+				'bottom' =>  intval( $this->get_setting( 'body_bootom_margin' )),
 			),
 		) );
 
@@ -183,7 +183,8 @@ class Body extends Component {
 			'lineHeight'    			=> intval( $this->get_setting( 'body_line_height' ) ),
 			'textColor'     			=> $this->get_setting( 'body_color' ),
 			'linkStyle'     			=> array(
-				'textColor' => $this->get_setting( 'body_link_color' )
+				'textColor' => $this->get_setting( 'body_link_color' ),
+                'underline' 	=> true,
 			),
 			'paragraphSpacingBefore' 	=> 18,
 			'paragraphSpacingAfter'		=> 18,
