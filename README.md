@@ -1,4 +1,4 @@
-#Publish to Apple News
+#Apple News
 
 ##Installation
 

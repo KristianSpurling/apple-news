@@ -1,4 +1,4 @@
-    <?php
+<?php
 require_once plugin_dir_path( __FILE__ ) . '../includes/apple-exporter/class-settings.php';
 require_once plugin_dir_path( __FILE__ ) . 'settings/class-admin-apple-settings-section.php';
 require_once plugin_dir_path( __FILE__ ) . 'settings/class-admin-apple-settings-section-api.php';
@@ -6,7 +6,6 @@ require_once plugin_dir_path( __FILE__ ) . 'settings/class-admin-apple-settings-
 require_once plugin_dir_path( __FILE__ ) . 'settings/class-admin-apple-settings-section-advanced.php';
 require_once plugin_dir_path( __FILE__ ) . 'settings/class-admin-apple-settings-section-post-types.php';
 require_once plugin_dir_path( __FILE__ ) . 'settings/class-admin-apple-settings-section-developer-tools.php';
-
 use Apple_Exporter\Settings as Settings;
 
 /**

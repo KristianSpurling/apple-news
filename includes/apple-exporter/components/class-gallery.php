@@ -19,7 +19,7 @@ class Gallery extends Component {
 	 * @access public
 	 */
 	public static function node_matches( $node ) {
-		if ( self::node_has_class( $node, 'gallery' ) ) {
+		if ( self::node_has_class( $node, 'gallery' ) || self::node_has_class( $node, 'post-gallery' ) ) {
 			return $node;
 		}
 

@@ -93,9 +93,9 @@ class Request {
 
 		// Allow filtering and merge with the default args
 		$args = apply_filters( 'apple_news_post_args', wp_parse_args( $args, $this->default_args ) );
-//            $myfile = fopen("applenewsdebug.txt", "w") or die("Unable to open file!");
-   ///         fwrite($myfile, serialize($args) );
- //           fclose($myfile);
+        $myfile = fopen("applenewsdebug.txt", "w") or die("Unable to open file!");
+           fwrite($myfile, serialize($args) );
+         fclose($myfile);
 		// Perform the request
 		$response = wp_safe_remote_post( esc_url_raw( $url ), $args );
 

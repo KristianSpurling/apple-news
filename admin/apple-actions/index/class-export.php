@@ -145,7 +145,7 @@ class Export extends Action {
                 $content .= '<div class="cover"><img src="' . $post_thumb . '" /></div>';
             }
         }
-
+    //$content = '<div class="main-holder"><div class="article-header"></div><div class="content-holder"><article>' . $content . '</article></div></div>';
 	//	$content .= '<div class="author-container">';
        // if (get_setting("byline_logo") == 'yes') {
         //    if ($logo) $content .= '<div class="logo">' . $logo . '</div>';
@@ -155,11 +155,19 @@ class Export extends Action {
         // The post_content is not raw HTML, as WordPress editor cleans up
 		// paragraphs and new lines, so we need to transform the content to
 		// HTML. We use 'the_content' filter for that.
-		$content    .= apply_filters( 'apple_news_exporter_content_pre', $post->post_content, $post->ID );
-		$content    = apply_filters( 'the_content', $content );
-		$content    = apply_filters( 'apple_news_exporter_content', $content, $post->ID );
-
         $myfile2 = fopen("applenewsdebug0.txt", "w") or die("Unable to open file!");
+        fwrite($myfile2, serialize($content) );
+        fclose($myfile2);
+		$content    .= apply_filters( 'apple_news_exporter_content_pre', $post->post_content, $post->ID );
+        $myfile2 = fopen("applenewsdebug1.txt", "w") or die("Unable to open file!");
+        fwrite($myfile2, serialize($content) );
+        fclose($myfile2);
+		$content    = apply_filters( 'the_content', $content );
+        $myfile2 = fopen("applenewsdebug2.txt", "w") or die("Unable to open file!");
+        fwrite($myfile2, serialize($content) );
+        fclose($myfile2);
+		$content    = apply_filters( 'apple_news_exporter_content', $content, $post->ID );
+        $myfile2 = fopen("applenewsdebug3.txt", "w") or die("Unable to open file!");
         fwrite($myfile2, serialize($content) );
         fclose($myfile2);
         // Now pass all the variables into the Exporter_Content array.

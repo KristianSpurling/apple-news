@@ -1,17 +1,17 @@
-m=== Publish To Apple News ===
+=== Apple News ===
 Contributors: potatomaster, alleyinteractive, beezwaxbuzz, gosukiwi, pilaf, jaygonzales, brianschick
 Donate link: http://wordpress.org
 Tags: publish, apple, news, iOS
 Requires at least: 4.0
 Tested up to: 4.6.1
-Stable tag: 1.1.9
+Stable tag: 1.1.9*
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl.html
 
 Enable your WordPress blog content to be published to your Apple News channel.
 
 == Description ==
-
+DO NOT UPDATE - FORKED
 The Publish to Apple News plugin enables your WordPress blog content to be published to your Apple News channel.
 
 **Features include:**
