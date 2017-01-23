@@ -151,38 +151,65 @@ class Admin_Apple_Settings extends Apple_News {
 		wp_enqueue_style( 'apple-news-settings-css', plugin_dir_url( __FILE__ ) .
 			'../assets/css/settings.css', array() );
 
+		wp_enqueue_script( 'iris' );
 		wp_enqueue_script( 'apple-news-select2-js', plugin_dir_url( __FILE__ ) .
 			'../vendor/select2/select2.full.min.js', array( 'jquery' ) );
 		wp_enqueue_script( 'apple-news-settings-js', plugin_dir_url( __FILE__ ) .
-			'../assets/js/settings.js', array( 'jquery', 'jquery-ui-draggable', 'jquery-ui-sortable', 'apple-news-select2-js' )
+			'../assets/js/settings.js', array( 'jquery', 'jquery-ui-draggable', 'jquery-ui-sortable', 'apple-news-select2-js', 'iris' )
 		);
+
+		wp_localize_script( 'apple-news-settings-js', 'appleNewsSettings', array(
+			'fontNotice' => __( 'Font preview is only available on macOS', 'apple-news' ),
+		) );
 	}
 
 	/**
-	 * Creates a new \Apple_Exporter\Settings instance and loads it with WordPress' saved
-	 * settings.
+	 * Creates a new Settings object and loads it with WordPress' saved settings.
+	 *
+	 * Merges saved settings from WordPress with default settings in the object.
+	 *
+	 * @access public
+	 * @return Settings A Settings object containing merged settings.
 	 */
 	public function fetch_settings() {
+
+		// If settings are not already loaded, load them.
 		if ( is_null( $this->loaded_settings ) ) {
+
+			// Initialize.
 			$settings = new Settings();
 			$wp_settings = get_option( self::$option_name );
 
-			// If this option doesn't exist, either the site has never installed this plugin
-			// or they may be using an old version with individual options.
-			// To be safe, attempt to migrate values.
-			// This will happen only once.
+			// If this option doesn't exist, either the site has never installed
+			// this plugin or they may be using an old version with individual
+			// options. To be safe, attempt to migrate values. This will happen only
+			// once.
 			if ( false === $wp_settings ) {
 				$wp_settings = $this->migrate_settings( $settings );
 			}
 
+			// Check for presence of legacy header settings and migrate to new.
+			$wp_settings = $this->migrate_header_settings( $wp_settings );
+
+			// Merge settings in the option with defaults.
 			foreach ( $settings->all() as $key => $value ) {
-				$wp_value = ( empty( $wp_settings[ $key ] ) ) ? $value : $wp_settings[ $key ];
-				$settings->set( $key, $wp_value );
+				$wp_value = ( empty( $wp_settings[ $key ] ) )
+					? $value
+					: $wp_settings[ $key ];
+				$settings->$key = $wp_value;
 			}
+
+			// Store in local object storage.
 			$this->loaded_settings = $settings;
 		}
 
+		/**
+		 * Allows for filtering of the merged settings before returning.
+		 *
+		 * @since 0.4.0
+		 *
+		 * @param Settings $settings The settings to be filtered.
+		 */
 		return apply_filters( 'apple_news_loaded_settings', $this->loaded_settings );
 	}
-
 }

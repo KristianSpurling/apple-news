@@ -3,6 +3,7 @@
 namespace Apple_Actions\Index;
 
 require_once plugin_dir_path( __FILE__ ) . '../class-action.php';
+require_once plugin_dir_path( __FILE__ ) . '../class-action-exception.php';
 require_once plugin_dir_path( __FILE__ ) . '../../../includes/apple-exporter/autoload.php';
 
 use Apple_Actions\Action as Action;
@@ -26,7 +27,7 @@ class Export extends Action {
 	 * @param Settings $settings
 	 * @param int $id
 	 */
-	function __construct( $settings, $id ) {
+	function __construct( $settings, $id = null ) {
 		parent::__construct( $settings );
 		$this->id = $id;
 	}
@@ -67,6 +68,56 @@ class Export extends Action {
         // Get the post thumbnail
         $post_thumb = wp_get_attachment_url(get_post_thumbnail_id($this->id)) ?: null;
 
+		// Build the byline
+		$byline = $this->format_byline( $post );
+
+		// Filter each of our items before passing into the exporter class.
+		$title      = apply_filters( 'apple_news_exporter_title', $post->post_title, $post->ID );
+		$excerpt    = apply_filters( 'apple_news_exporter_excerpt', $excerpt, $post->ID );
+		$post_thumb = apply_filters( 'apple_news_exporter_post_thumb', $post_thumb, $post->ID );
+		$byline     = apply_filters( 'apple_news_exporter_byline', $byline, $post->ID );
+
+		// The post_content is not raw HTML, as WordPress editor cleans up
+		// paragraphs and new lines, so we need to transform the content to
+		// HTML. We use 'the_content' filter for that.
+		$content    = apply_filters( 'apple_news_exporter_content_pre', $post->post_content, $post->ID );
+		$content    = apply_filters( 'the_content', $content );
+		$content    = apply_filters( 'apple_news_exporter_content', $content, $post->ID );
+
+		// Now pass all the variables into the Exporter_Content array.
+		$base_content = new Exporter_Content(
+			$post->ID,
+			$title,
+			$content,
+			$excerpt,
+			$post_thumb,
+			$byline,
+			$this->fetch_content_settings()
+		);
+
+		return new Exporter( $base_content, null, $this->settings );
+	}
+
+	/**
+	 * Formats the byline
+	 *
+	 * @since 1.2.0
+	 * @param WP_Post $post
+	 * @param string $author
+	 * @param string $date
+	 * @return string
+	 * @access public
+	 */
+	public function format_byline( $post, $author = '', $date = '' ) {
+		// Get the author
+		if ( empty( $author ) ) {
+			$author = ucfirst( get_the_author_meta( 'display_name', $post->post_author ) );
+		}
+
+		// Get the date
+		if ( empty( $date ) && ! empty( $post->post_date ) ) {
+			$date = $post->post_date;
+		}
         // Get the author
         $author = ucfirst(get_the_author_meta('display_name', $post->post_author));
 
@@ -89,6 +140,13 @@ class Export extends Action {
             $temp_byline_placeholder = 'AUTHOR' . time();
             $byline = str_replace('#author#', $temp_byline_placeholder, $byline_format);
 
+			// Attempt to parse the date format from the remaining string
+			$matches = array();
+			preg_match( '/#(.*?)#/', $byline, $matches );
+			if ( ! empty( $matches[1] ) && ! empty( $date ) ) {
+				// Set the date using the custom format
+				$byline = str_replace( $matches[0], date( $matches[1], strtotime( $date ) ), $byline );
+			}
             // Attempt to parse the date format from the remaining string
             $matches = array();
             preg_match('/#(.*?)#/', $byline, $matches);
@@ -100,6 +158,16 @@ class Export extends Action {
             // Replace the temporary placeholder with the actual byline
             $byline = str_replace($temp_byline_placeholder, $author, $byline);
 
+		} else {
+			// Use the default format
+			$byline = sprintf(
+				'by %1$s | %2$s',
+				$author,
+				date( $date_format, strtotime( $date ) )
+			);
+		}
+
+		return $byline;
         } else {
             // Use the default format
             $byline = sprintf(

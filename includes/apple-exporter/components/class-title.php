@@ -35,6 +35,12 @@ class Title extends Component {
 	private function set_style() {
 		$this->json[ 'textStyle' ] = 'default-title';
 		$this->register_style( 'default-title', array(
+			'fontName' => $this->get_setting( 'header1_font' ),
+			'fontSize' => intval( $this->get_setting( 'header1_size' ) ),
+			'lineHeight' => intval( $this->get_setting( 'header1_line_height' ) ),
+			'tracking' => intval( $this->get_setting( 'header1_tracking' ) ) / 100,
+			'textColor' => $this->get_setting( 'header1_color' ),
+			'textAlignment' => $this->find_text_alignment(),
 			'fontName'      => $this->get_setting( 'header_font' ),
 			'fontSize'      => intval( $this->get_setting( 'header_size' ) ),
 			'lineHeight'    => intval( $this->get_setting( 'header_line_height' ) ),

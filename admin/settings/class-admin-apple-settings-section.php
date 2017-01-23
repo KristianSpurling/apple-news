@@ -359,8 +359,9 @@ class Admin_Apple_Settings_Section extends Apple_News {
 	 *
 	 * @var Settings
 	 * @access protected
+	 * @static
 	 */
-	protected $base_settings;
+	protected static $base_settings;
 
 	/**
 	 * Settings for the section.
@@ -389,6 +390,7 @@ class Admin_Apple_Settings_Section extends Apple_News {
 			'class' => array(),
 			'name' => array(),
 			'multiple' => array(),
+			'id' => array(),
 		),
 		'option' => array(
 			'value' => array(),
@@ -403,6 +405,7 @@ class Admin_Apple_Settings_Section extends Apple_News {
 			'type' => array(),
 			'required' => array(),
 			'size' => array(),
+			'id' => array(),
 		),
 		'br' => array(),
 		'b' => array(),
@@ -412,6 +415,27 @@ class Admin_Apple_Settings_Section extends Apple_News {
 		'a' => array(
 			'href' => array(),
 			'target' => array(),
+		),
+		'div' => array(
+			'class' => array(),
+		),
+		'h1' => array(
+			'class' => array(),
+		),
+		'h2' => array(
+			'class' => array(),
+		),
+		'h3' => array(
+			'class' => array(),
+		),
+		'h4' => array(
+			'class' => array(),
+		),
+		'h5' => array(
+			'class' => array(),
+		),
+		'h6' => array(
+			'class' => array(),
 		),
 	);
 
@@ -423,7 +447,7 @@ class Admin_Apple_Settings_Section extends Apple_News {
 	function __construct( $page ) {
 		$this->page             = $page;
 		$base_settings          = new \Apple_Exporter\Settings;
-		$this->base_settings    = $base_settings->all();
+		self::$base_settings    = $base_settings->all();
 		$this->settings         = apply_filters( 'apple_news_section_settings', $this->settings, $page );
 		$this->groups           = apply_filters( 'apple_news_section_groups', $this->groups, $page );
 		self::$fonts            = apply_filters( 'apple_news_fonts_list', self::$fonts );
@@ -455,7 +479,7 @@ class Admin_Apple_Settings_Section extends Apple_News {
 			$settings = array();
 			foreach ( $info['settings'] as $name ) {
 				$settings[ $name ] = $this->settings[ $name ];
-				$settings[ $name ]['default'] = $this->get_default_for( $name );
+				$settings[ $name ]['default'] = self::get_default_for( $name );
 				$settings[ $name ]['callback'] = ( ! empty( $this->settings[ $name ]['callback'] ) ) ? $this->settings[ $name ]['callback'] : '';
 			}
 
@@ -496,7 +520,7 @@ class Admin_Apple_Settings_Section extends Apple_News {
 
 		$type  = $this->get_type_for( $name );
 		$settings = get_option( self::$option_name );
-		$value = self::get_value( $name, $settings ) ?: $default_value;
+		$value = self::get_value( $name, $settings );
 		$field = null;
 
 		// Get the field size
@@ -518,9 +542,9 @@ class Admin_Apple_Settings_Section extends Apple_News {
 
 			// Use select2 only when there is a considerable ammount of options available
 			if ( count( $type ) > 10 ) {
-				$field = '<select class="select2" name="%s' . $multiple_name . '" ' . $multiple_attr . '>';
+				$field = '<select class="select2 standard" id="%s" name="%s' . $multiple_name . '" ' . $multiple_attr . '>';
 			} else {
-				$field = '<select name="%s' . $multiple_name . '" ' . $multiple_attr . '>';
+				$field = '<select id="%s" name="%s' . $multiple_name . '" ' . $multiple_attr . '>';
 			}
 
 			foreach ( $type as $key => $option ) {
@@ -537,7 +561,7 @@ class Admin_Apple_Settings_Section extends Apple_News {
 			}
 			$field .= '</select>';
 		} else if ( 'font' == $type ) {
-			$field = '<select class="select2" name="%s">';
+			$field = '<select class="select2 font" id="%s" name="%s">';
 			foreach ( self::$fonts as $option ) {
 				$field .= "<option value='" . esc_attr( $option ) . "'";
 				if ( $option == $value ) {
@@ -563,16 +587,16 @@ class Admin_Apple_Settings_Section extends Apple_News {
 
 			$field .= '</select>';
 		} else if ( 'integer' == $type ) {
-			$field = '<input type="number" name="%s" value="%s" size="%s" %s>';
+			$field = '<input type="number" id="%s" name="%s" value="%s" size="%s" %s>';
 		} else if ( 'float' == $type ) {
-			$field = '<input class="input-float" placeholder="' . esc_attr( $default_value ) . '" type="text" step="any" name="%s" value="%s" size="%s">';
+			$field = '<input class="input-float" placeholder="' . esc_attr( $default_value ) . '" type="text" step="any" id="%s" name="%s" value="%s" size="%s">';
 		} else if ( 'color' == $type ) {
-			$field = '<input type="color" name="%s" value="%s" %s>';
+			$field = '<input type="text" id="%s" name="%s" value="%s" class="apple-news-color-picker" %s>';
 		} else if ( 'password' == $type ) {
-			$field = '<input type="password" name="%s" value="%s" size="%s" %s>';
+			$field = '<input type="password" id="%s" name="%s" value="%s" size="%s" %s>';
 		} else {
 			// If nothing else matches, it's a string.
-			$field = '<input type="text" name="%s" value="%s" size="%s" %s>';
+			$field = '<input type="text" id="%s" name="%s" value="%s" size="%s" %s>';
 		}
 
 		// Add a description, if set.
@@ -585,11 +609,13 @@ class Admin_Apple_Settings_Section extends Apple_News {
 		if ( is_array( $type ) || 'font' === $type || 'boolean' === $type ) {
 			return sprintf(
 				$field,
+				esc_attr( $name ),
 				esc_attr( $name )
 			);
 		} else {
 			return sprintf(
 				$field,
+				esc_attr( $name ),
 				esc_attr( $name ),
 				esc_attr( $value ),
 				intval( $size ),
@@ -661,9 +687,10 @@ class Admin_Apple_Settings_Section extends Apple_News {
 	 * @param string $name
 	 * @return string
 	 * @access protected
+	 * @static
 	 */
-	protected function get_default_for( $name ) {
-		return isset( $this->base_settings[ $name ] ) ? $this->base_settings[ $name ] : '';
+	protected static function get_default_for( $name ) {
+		return isset( self::$base_settings[ $name ] ) ? self::$base_settings[ $name ] : '';
 	}
 
 	/**
@@ -674,6 +701,26 @@ class Admin_Apple_Settings_Section extends Apple_News {
 	 */
 	public function get_section_info() {
 		return '';
+	}
+
+	/**
+	 * HTML to display before the section.
+	 *
+	 * @return string
+	 * @access public
+	 */
+	public function before_section() {
+		echo '';
+	}
+
+	/**
+	 * HTML to display after the section.
+	 *
+	 * @return string
+	 * @access public
+	 */
+	public function after_section() {
+		echo '';
 	}
 
 	/**
@@ -698,7 +745,7 @@ class Admin_Apple_Settings_Section extends Apple_News {
 		if ( empty( $saved_settings ) ) {
 			$saved_settings = get_option( self::$option_name );
 		}
-		return ( ! empty( $saved_settings[ $key ] ) ) ? $saved_settings[ $key ] : '';
+		return ( isset( $saved_settings[ $key ] ) ) ? $saved_settings[ $key ] : self::get_default_for( $key );
 	}
 
 	/**

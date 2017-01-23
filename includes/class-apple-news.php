@@ -33,12 +33,28 @@ class Apple_News {
 	public static $option_name = 'apple_news_settings';
 
 	/**
+	 * Link to support for the plugin on WordPress.org.
+	 *
+	 * @var string
+	 * @access public
+	 */
+	public static $wordpress_org_support_url = 'https://wordpress.org/support/plugin/publish-to-apple-news';
+
+	/**
+	 * Link to support for the plugin on github.
+	 *
+	 * @var string
+	 * @access public
+	 */
+	public static $github_support_url = 'https://github.com/alleyinteractive/apple-news/issues';
+
+	/**
 	 * Plugin version.
 	 *
 	 * @var string
-	 * @access protected
+	 * @access public
 	 */
-	protected $version = '1.1.9';
+	public static $version = '1.2.1';
 
 	/**
 	 * Extracts the filename for bundling an asset.
@@ -60,6 +76,63 @@ class Apple_News {
 
 		// Remove any spaces and return the filename
 		return str_replace( ' ', '', $filename );
+	}
+
+	/**
+	 * Migrate legacy header settings to new format.
+	 *
+	 * @param array $wp_settings An array of settings loaded from WP options.
+	 *
+	 * @access public
+	 * @return array The modified settings array.
+	 */
+	public function migrate_header_settings( $wp_settings ) {
+
+		// Check for presence of any legacy header setting.
+		if ( empty( $wp_settings['header_font'] )
+			&& empty( $wp_settings['header_color'] )
+			&& empty( $wp_settings['header_line_height'] )
+		) {
+			return $wp_settings;
+		}
+
+		// Check for presence of legacy font setting.
+		if ( ! empty( $wp_settings['header_font'] ) ) {
+			$wp_settings['header1_font'] = $wp_settings['header_font'];
+			$wp_settings['header2_font'] = $wp_settings['header_font'];
+			$wp_settings['header3_font'] = $wp_settings['header_font'];
+			$wp_settings['header4_font'] = $wp_settings['header_font'];
+			$wp_settings['header5_font'] = $wp_settings['header_font'];
+			$wp_settings['header6_font'] = $wp_settings['header_font'];
+			unset( $wp_settings['header_font'] );
+		}
+
+		// Check for presence of legacy color setting.
+		if ( ! empty( $wp_settings['header_color'] ) ) {
+			$wp_settings['header1_color'] = $wp_settings['header_color'];
+			$wp_settings['header2_color'] = $wp_settings['header_color'];
+			$wp_settings['header3_color'] = $wp_settings['header_color'];
+			$wp_settings['header4_color'] = $wp_settings['header_color'];
+			$wp_settings['header5_color'] = $wp_settings['header_color'];
+			$wp_settings['header6_color'] = $wp_settings['header_color'];
+			unset( $wp_settings['header_color'] );
+		}
+
+		// Check for presence of legacy line height setting.
+		if ( ! empty( $wp_settings['header_line_height'] ) ) {
+			$wp_settings['header1_line_height'] = $wp_settings['header_line_height'];
+			$wp_settings['header2_line_height'] = $wp_settings['header_line_height'];
+			$wp_settings['header3_line_height'] = $wp_settings['header_line_height'];
+			$wp_settings['header4_line_height'] = $wp_settings['header_line_height'];
+			$wp_settings['header5_line_height'] = $wp_settings['header_line_height'];
+			$wp_settings['header6_line_height'] = $wp_settings['header_line_height'];
+			unset( $wp_settings['header_line_height'] );
+		}
+
+		// Store the updated option to remove the legacy setting names.
+		update_option( self::$option_name, $wp_settings, 'no' );
+
+		return $wp_settings;
 	}
 
 	/**
@@ -85,5 +158,35 @@ class Apple_News {
 		array_map( 'delete_option', array_keys( $migrated_settings ) );
 
 		return $migrated_settings;
+	}
+
+	/**
+	 * Displays support information for the plugin.
+	 *
+	 * @var string $format
+	 * @var boolean $with_padding
+	 * @return string
+	 * @access public
+	 */
+	public static function get_support_info( $format = 'html', $with_padding = true ) {
+		$support_info = sprintf(
+			__( 'If you need assistance with this issue, please reach out for support on <a href="%s">WordPress.org</a> or <a href="%s">github</a>.', 'apple-news' ),
+			esc_url( self::$wordpress_org_support_url ),
+			esc_url( self::$github_support_url )
+		);
+
+		if ( 'text' === $format ) {
+			$support_info = strip_tags( $support_info );
+		}
+
+		if ( $with_padding ) {
+			if ( 'text' === $format ) {
+				$support_info = "\n\n" . $support_info;
+			} else {
+				$support_info = '<br /><br />' . $support_info;
+			}
+		}
+
+		return $support_info;
 	}
 }

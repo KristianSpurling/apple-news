@@ -74,6 +74,12 @@ class Heading extends Component {
 		// *: No markdown because the apple format doesn't support markdown with
 		// textStyle in headings.
 		$text = wp_strip_all_tags( $matches[2] );
+
+		$this->json = array(
+			'role'   => 'heading' . $level,
+			'text'   => trim( $this->parser->parse( $text ) ),
+			'format' => $this->parser->format,
+		);
         if ($level == 6) {
             $this->json = array(
                 'role' => 'quote',
@@ -102,6 +108,15 @@ class Heading extends Component {
 	 *
 	 * @access private
 	 */
+	private function set_layout() {
+		$this->json['layout'] = 'heading-layout';
+		$this->register_layout( 'heading-layout', array(
+			'columnStart' => $this->get_setting( 'body_offset' ),
+			'columnSpan' => $this->get_setting( 'body_column_span' ),
+			'margin' => array(
+				'bottom' => 15,
+				'top' => 15,
+			),
 	private function set_layout($level) {
 		$this->json['layout'] = 'heading-layout' . $level;
 		$this->register_full_width_layout( 'heading-layout' . $level, array(
@@ -115,6 +130,16 @@ class Heading extends Component {
 	 * @access private
 	 */
 	private function set_style( $level ) {
+		$this->json[ 'textStyle' ] = 'default-heading-' . $level;
+		$this->register_style( 'default-heading-' . $level, array(
+			'fontName' => $this->get_setting( 'header' . $level . '_font' ),
+			'fontSize' => intval( $this->get_setting( 'header' . $level . '_size' ) ),
+			'lineHeight' => intval( $this->get_setting( 'header' . $level . '_line_height' ) ),
+			'textColor' => $this->get_setting( 'header' . $level . '_color' ),
+			'textAlignment' => $this->find_text_alignment(),
+			'tracking' => intval( $this->get_setting( 'header' . $level . '_tracking' ) ) / 100,
+		) );
+	}
 		$this->json[ 'textStyle' ] = 'default-heading' . $level;
 		$this->register_style( 'default-heading' . $level, array(
 			'fontName'      => $this->get_setting( 'heading' . $level . '_font' ),
