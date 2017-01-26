@@ -108,18 +108,17 @@ class Export extends Action {
 	 * @return string
 	 * @access public
 	 */
-	public function format_byline( $post, $author = '', $date = '' ) {
-		// Get the author
-		if ( empty( $author ) ) {
-			$author = ucfirst( get_the_author_meta( 'display_name', $post->post_author ) );
-		}
-
-		// Get the date
-		if ( empty( $date ) && ! empty( $post->post_date ) ) {
-			$date = $post->post_date;
-		}
+	public function format_byline( $post, $author = '', $date = '' )
+    {
         // Get the author
-        $author = ucfirst(get_the_author_meta('display_name', $post->post_author));
+        if (empty($author)) {
+            $author = ucfirst(get_the_author_meta('display_name', $post->post_author));
+        }
+
+        // Get the date
+        if (empty($date) && !empty($post->post_date)) {
+            $date = $post->post_date;
+        }
 
         $userDataBlob = get_user_by('id', $post->post_author);
         $photoauthor = get_field('_ui_photo', 'user_' . $userDataBlob->ID);
@@ -140,13 +139,13 @@ class Export extends Action {
             $temp_byline_placeholder = 'AUTHOR' . time();
             $byline = str_replace('#author#', $temp_byline_placeholder, $byline_format);
 
-			// Attempt to parse the date format from the remaining string
-			$matches = array();
-			preg_match( '/#(.*?)#/', $byline, $matches );
-			if ( ! empty( $matches[1] ) && ! empty( $date ) ) {
-				// Set the date using the custom format
-				$byline = str_replace( $matches[0], date( $matches[1], strtotime( $date ) ), $byline );
-			}
+            // Attempt to parse the date format from the remaining string
+            $matches = array();
+            preg_match('/#(.*?)#/', $byline, $matches);
+            if (!empty($matches[1]) && !empty($date)) {
+                // Set the date using the custom format
+                $byline = str_replace($matches[0], date($matches[1], strtotime($date)), $byline);
+            }
             // Attempt to parse the date format from the remaining string
             $matches = array();
             preg_match('/#(.*?)#/', $byline, $matches);
@@ -158,24 +157,17 @@ class Export extends Action {
             // Replace the temporary placeholder with the actual byline
             $byline = str_replace($temp_byline_placeholder, $author, $byline);
 
-		} else {
-			// Use the default format
-			$byline = sprintf(
-				'by %1$s | %2$s',
-				$author,
-				date( $date_format, strtotime( $date ) )
-			);
-		}
-
-		return $byline;
         } else {
             // Use the default format
             $byline = sprintf(
                 'by %1$s | %2$s',
                 $author,
-                date($date_format, strtotime($post->post_date))
+                date($date_format, strtotime($date))
             );
         }
+
+		return $byline;
+
         $content = '';
         // Filter each of our items before passing into the exporter class.
         $title = apply_filters('apple_news_exporter_title', $post->post_title, $post->ID);

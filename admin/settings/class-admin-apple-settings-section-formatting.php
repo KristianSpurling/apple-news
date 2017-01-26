@@ -138,6 +138,7 @@ class Admin_Apple_Settings_Section_Formatting extends Admin_Apple_Settings_Secti
 			'header1_font' => array(
 				'label' => __( 'Header 1 font face', 'apple-news' ),
 				'type' => 'font',
+			),
 			'byline_logo' => array(
 				'label'   => __( 'Show photo with Byline', 'apple-news' ),
 				'type'    => array( 'yes', 'no' ),
@@ -242,6 +243,7 @@ class Admin_Apple_Settings_Section_Formatting extends Admin_Apple_Settings_Secti
 			'header_size' => array(
 				'label'   => __( 'Header font size', 'apple-news' ),
 				'type'    => 'integer',
+			),
 			'header2_color' => array(
 				'label' => __( 'Header 2 font color', 'apple-news' ),
 				'type' => 'color',
@@ -269,6 +271,7 @@ class Admin_Apple_Settings_Section_Formatting extends Admin_Apple_Settings_Secti
 			'header_top_margin' => array(
 				'label'   => __( 'Header top margin', 'apple-news' ),
 				'type'    => 'integer',
+			),
 			'header2_size' => array(
 				'label' => __( 'Header 2 font size', 'apple-news' ),
 				'type' => 'integer',
@@ -276,6 +279,7 @@ class Admin_Apple_Settings_Section_Formatting extends Admin_Apple_Settings_Secti
 			'header_bottom_margin' => array(
 				'label'   => __( 'Header bottom margin', 'apple-news' ),
 				'type'    => 'integer',
+			),
 			'header3_size' => array(
 				'label' => __( 'Header 3 font size', 'apple-news' ),
 				'type' => 'integer',
@@ -301,6 +305,7 @@ class Admin_Apple_Settings_Section_Formatting extends Admin_Apple_Settings_Secti
 			'heading1_size' => array(
 				'label'   => __( 'Heading 1 font size', 'apple-news' ),
 				'type'    => 'integer',
+			),
 			'header4_size' => array(
 				'label' => __( 'Header 4 font size', 'apple-news' ),
 				'type' => 'integer',
@@ -308,6 +313,7 @@ class Admin_Apple_Settings_Section_Formatting extends Admin_Apple_Settings_Secti
 			'header5_size' => array(
 				'label' => __( 'Header 5 font size', 'apple-news' ),
 				'type' => 'integer',
+			),
 			'heading1_top_margin' => array(
 				'label'   => __( 'Heading 1 top margin', 'apple-news' ),
 				'type'    => 'integer',
@@ -315,6 +321,7 @@ class Admin_Apple_Settings_Section_Formatting extends Admin_Apple_Settings_Secti
 			'header6_size' => array(
 				'label' => __( 'Header 6 font size', 'apple-news' ),
 				'type' => 'integer',
+			),
 			'heading1_bottom_margin' => array(
 				'label'   => __( 'Heading 1 bottom margin', 'apple-news' ),
 				'type'    => 'integer',
@@ -446,7 +453,6 @@ class Admin_Apple_Settings_Section_Formatting extends Admin_Apple_Settings_Secti
 				'label'   => __( 'Heading 6 alignment', 'apple-news' ),
 				'type'    => array( 'left', 'center', 'right' ),
 			),
-
 			'pullquote_font' => array(
 				'label' => __( 'Pullquote font face', 'apple-news' ),
 				'type' => 'font',
@@ -568,8 +574,8 @@ class Admin_Apple_Settings_Section_Formatting extends Admin_Apple_Settings_Secti
 					'render_meta_component_order'
 				),
 				'sanitize' => array( $this, 'sanitize_array' ),
-			),
-		);
+			)
+			);
 
 		// Add the groups
 		$this->groups = array(
@@ -737,7 +743,6 @@ class Admin_Apple_Settings_Section_Formatting extends Admin_Apple_Settings_Secti
 				'settings' => array( 'meta_component_order' ),
 			),
 		);
-
 		parent::__construct( $page );
 	}
 

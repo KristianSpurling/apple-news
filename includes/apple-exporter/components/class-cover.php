@@ -61,20 +61,19 @@ class Cover extends Component {
 			'ignoreDocumentMargin' => true,
 			'columnStart' => 0,
 			'columnSpan' => $this->get_setting( 'layout_columns' ),
-			'columnSpan' => 11,
-		) );
 
+		) );
+//'columnSpan' => 11,
 		$this->register_full_width_layout( 'headerBelowTextPhotoLayout', array(
 			'ignoreDocumentMargin' => true,
 			'columnStart' => 0,
 			'columnSpan' => $this->get_setting( 'layout_columns' ),
-			'columnSpan' => 11,
 			'margin' => array(
 				'top' => 30,
 				'bottom' => 0,
 			),
 		) );
 	}
-
+//'columnSpan' => 11,
 }
 

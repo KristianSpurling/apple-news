@@ -19,217 +19,194 @@ namespace Apple_Exporter;
  *
  * @since 0.4.0
  */
-class Settings {
+class Settings
+{
 
-	/**
-	 * Exporter's default settings.
-	 *
-	 * These settings can be overridden on the plugin settings screen.
-	 *
-	 * @var array
-	 * @access private
-	 */
-	private $_settings = array(
+    /**
+     * Exporter's default settings.
+     *
+     * These settings can be overridden on the plugin settings screen.
+     *
+     * @var array
+     * @access private
+     */
+    private $_settings = array(
 
-		// API information.
-		'api_key' => '',
-		'api_secret' => '',
-		'api_channel' => '',
-		'api_autosync' => 'yes',
-		'api_autosync_update' => 'yes',
-		'api_async' => 'no',
+        // API information.
+        'api_key' => '',
+        'api_secret' => '',
+        'api_channel' => '',
+        'api_autosync' => 'yes',
+        'api_autosync_update' => 'yes',
+        'api_async' => 'no',
 
-		'post_types' => array( 'post' ),
-		'show_metabox' => 'yes',
+        'post_types' => array('post'),
+        'show_metabox' => 'yes',
 
-		'layout_margin' => 100,
-		'layout_gutter' => 20,
-		'layout_width' => 1024,
-		'layout_columns'   				=> 11,
-		'layout_margin'   				=> 50,
-		'layout_gutter'   				=> 20,
-		'layout_width'   				=> 1024,
+        'layout_columns' => 11,
+        'layout_margin' => 50,
+        'layout_gutter' => 20,
+        'layout_width' => 1024,
 
-		'body_font' => 'AvenirNext-Regular',
-		'body_size' => 18,
-		'body_color' => '#4f4f4f',
-		'body_link_color' => '#428bca',
-		'body_background_color' => '#fafafa',
-		'body_orientation' => 'left',
-		'body_line_height' => 24,
-		'body_tracking' => 0,
-		'body_font'        				=> 'AvenirNext-Regular',
-		'body_size'        				=> 18,
-		'body_color'       				=> '#4f4f4f',
-		'body_link_color'  				=> '#428BCA',
-		'body_background_color'   => '#FAFAFA',
-		'body_orientation' 				=> 'left',
-		'body_line_height' 				=> 24,
-        'body_top_margin'               => 40,
-        'body_bottom_margin'            => 40,
+        'body_font' => 'AvenirNext-Regular',
+        'body_size' => 18,
+        'body_color' => '#4f4f4f',
+        'body_link_color' => '#428BCA',
+        'body_background_color' => '#FAFAFA',
+        'body_orientation' => 'left',
+        'body_line_height' => 24,
+        'body_top_margin' => 40,
+        'body_bottom_margin' => 40,
+        'body_tracking' => 0,
 
 
-		'initial_dropcap' => 'yes',
-		'dropcap_font' => 'AvenirNext-Bold',
-		'dropcap_color' => '#4f4f4f',
+        'initial_dropcap' => 'yes',
+        'dropcap_font' => 'AvenirNext-Bold',
+        'dropcap_color' => '#4f4f4f',
 
-		'byline_font' => 'AvenirNext-Medium',
-		'byline_size' => 13,
-		'byline_line_height' => 24,
-		'byline_tracking' => 0,
-		'byline_color' => '#7c7c7c',
-		'byline_format' => 'by #author# | #M j, Y | g:i A#',
+        'byline_font' => 'AvenirNext-Medium',
+        'byline_size' => 13,
+        'byline_line_height' => 24,
+        'byline_tracking' => 0,
+        'byline_color' => '#7c7c7c',
+        'byline_format' => 'by #author# | #M j, Y | g:i A#',
 
-		'header1_font' => 'AvenirNext-Bold',
-		'header2_font' => 'AvenirNext-Bold',
-		'header3_font' => 'AvenirNext-Bold',
-		'header4_font' => 'AvenirNext-Bold',
-		'header5_font' => 'AvenirNext-Bold',
-		'header6_font' => 'AvenirNext-Bold',
-		'header1_color' => '#333333',
-		'header2_color' => '#333333',
-		'header3_color' => '#333333',
-		'header4_color' => '#333333',
-		'header5_color' => '#333333',
-		'header6_color' => '#333333',
-		'header1_size' => 48,
-		'header2_size' => 32,
-		'header3_size' => 24,
-		'header4_size' => 21,
-		'header5_size' => 18,
-		'header6_size' => 16,
-		'header1_line_height' => 52,
-		'header2_line_height' => 36,
-		'header3_line_height' => 28,
-		'header4_line_height' => 26,
-		'header5_line_height' => 24,
-		'header6_line_height' => 22,
-		'header1_tracking' => 0,
-		'header2_tracking' => 0,
-		'header3_tracking' => 0,
-		'header4_tracking' => 0,
-		'header5_tracking' => 0,
-		'header6_tracking' => 0,
-		'byline_font'     				=> 'AvenirNext-Medium',
-		'byline_size'     				=> 13,
-		'byline_color'    				=> '#7c7c7c',
-		'byline_format'						=> 'by #author# | #M j, Y | g:i A#',
-        'byline_logo'                   => 'yes',
-        'byline_margin'     				=>  20,
-        'byline_alignment'     				=>  'center',
-		'header_font'     				=> 'AvenirNext-Bold',
-		'header_color'    				=> '#333333',
-        'header_size'                   => 32,
-        'header_top_margin'           => 5,
-        'header_bottom_margin'            => 16,
-        'header_alignment'    				=> 'center',
-        'header_line_height'            => 52,
-        'header_all_caps'            => 'yes',
-        'heading1_size'  				=> 48,
-        'heading1_font'    				=> 'AvenirNext-Bold',
-        'heading1_color'    				=> '#333333',
-        'heading1_top_margin'               =>  5,
-        'heading1_bottom_margin'              => 10,
-        'heading1_alignment'    				=> 'center',
-        'heading1_line_height'            => 38,
+        'header1_font' => 'AvenirNext-Bold',
+        'header2_font' => 'AvenirNext-Bold',
+        'header3_font' => 'AvenirNext-Bold',
+        'header4_font' => 'AvenirNext-Bold',
+        'header5_font' => 'AvenirNext-Bold',
+        'header6_font' => 'AvenirNext-Bold',
+        'header1_color' => '#333333',
+        'header2_color' => '#333333',
+        'header3_color' => '#333333',
+        'header4_color' => '#333333',
+        'header5_color' => '#333333',
+        'header6_color' => '#333333',
+        'header1_size' => 48,
+        'header2_size' => 32,
+        'header3_size' => 24,
+        'header4_size' => 21,
+        'header5_size' => 18,
+        'header6_size' => 16,
+        'header1_line_height' => 52,
+        'header2_line_height' => 36,
+        'header3_line_height' => 28,
+        'header4_line_height' => 26,
+        'header5_line_height' => 24,
+        'header6_line_height' => 22,
+        'header1_tracking' => 0,
+        'header2_tracking' => 0,
+        'header3_tracking' => 0,
+        'header4_tracking' => 0,
+        'header5_tracking' => 0,
+        'header6_tracking' => 0,
+        'byline_logo' => 'yes',
+        'byline_margin' => 20,
+        'byline_alignment' => 'center',
+        'header_font' => 'AvenirNext-Bold',
+        'header_color' => '#333333',
+        'header_size' => 32,
+        'header_top_margin' => 5,
+        'header_bottom_margin' => 16,
+        'header_alignment' => 'center',
+        'header_line_height' => 52,
+        'header_all_caps' => 'yes',
+        'heading1_size' => 48,
+        'heading1_font' => 'AvenirNext-Bold',
+        'heading1_color' => '#333333',
+        'heading1_top_margin' => 5,
+        'heading1_bottom_margin' => 10,
+        'heading1_alignment' => 'center',
+        'heading1_line_height' => 38,
 
-        'heading2_size'						=> 32,
-        'heading2_font'     				=> 'AvenirNext-Bold',
-        'heading2_color'    				=> '#333333',
-        'heading2_top_margin'               =>  5,
-        'heading2_bottom_margin'              => 10,
-        'heading2_alignment'    				=> 'center',
-        'heading2_line_height'            => 40,
-        'heading2_all_caps'    				=> 'yes',
-        'heading3_size'    				=> 24,
-        'heading3_font'     				=> 'AvenirNext-Bold',
-        'heading3_color'    				=> '#333333',
-        'heading3_top_margin'               =>  5,
-        'heading3_bottom_margin'              => 10,
-        'heading3_alignment'    				=> 'center',
-        'heading3_line_height'            => 26,
+        'heading2_size' => 32,
+        'heading2_font' => 'AvenirNext-Bold',
+        'heading2_color' => '#333333',
+        'heading2_top_margin' => 5,
+        'heading2_bottom_margin' => 10,
+        'heading2_alignment' => 'center',
+        'heading2_line_height' => 40,
+        'heading2_all_caps' => 'yes',
+        'heading3_size' => 24,
+        'heading3_font' => 'AvenirNext-Bold',
+        'heading3_color' => '#333333',
+        'heading3_top_margin' => 5,
+        'heading3_bottom_margin' => 10,
+        'heading3_alignment' => 'center',
+        'heading3_line_height' => 26,
 
-        'heading4_size'    				=> 21,
-        'heading4_font'     				=> 'AvenirNext-Bold',
-        'heading4_color'    				=> '#333333',
-        'heading4_top_margin'               =>  5,
-        'heading4_bottom_margin'              => 10,
-        'heading4_alignment'    				=> 'center',
-        'heading4_line_height'            => 23,
+        'heading4_size' => 21,
+        'heading4_font' => 'AvenirNext-Bold',
+        'heading4_color' => '#333333',
+        'heading4_top_margin' => 5,
+        'heading4_bottom_margin' => 10,
+        'heading4_alignment' => 'center',
+        'heading4_line_height' => 23,
 
-        'heading5_size'    				=> 18,
-        'heading5_font'     				=> 'AvenirNext-Bold',
-        'heading5_color'    				=> '#333333',
-        'heading5_top_margin'               =>  5,
-        'heading5_bottom_margin'              => 10,
-        'heading5_alignment'    				=> 'center',
-        'heading5_line_height'            => 20,
+        'heading5_size' => 18,
+        'heading5_font' => 'AvenirNext-Bold',
+        'heading5_color' => '#333333',
+        'heading5_top_margin' => 5,
+        'heading5_bottom_margin' => 10,
+        'heading5_alignment' => 'center',
+        'heading5_line_height' => 20,
 
-        'heading6_size'    				=> 16,
-        'heading6_font'     				=> 'AvenirNext-Bold',
-        'heading6_color'    				=> '#333333',
-        'heading6_top_margisn'               =>  5,
-        'heading6_bottom_margin'              => 10,
-        'heading6_alignment'    				=> 'center',
-        'heading6_line_height'            => 18,
+        'heading6_size' => 16,
+        'heading6_font' => 'AvenirNext-Bold',
+        'heading6_color' => '#333333',
+        'heading6_top_margisn' => 5,
+        'heading6_bottom_margin' => 10,
+        'heading6_alignment' => 'center',
+        'heading6_line_height' => 18,
 
-		'pullquote_font' => 'AvenirNext-Bold',
-		'pullquote_size' => 48,
-		'pullquote_color' => '#53585f',
-		'pullquote_border_color' => '#53585f',
-		'pullquote_border_style' => 'solid',
-		'pullquote_border_width' => '3',
-		'pullquote_transform' => 'uppercase',
-		'pullquote_line_height' => 48,
-		'pullquote_tracking' => 0,
+        'pullquote_font' => 'AvenirNext-Bold',
+        'pullquote_size' => 48,
+        'pullquote_color' => '#53585f',
+        'pullquote_border_color' => '#53585f',
+        'pullquote_border_style' => 'solid',
+        'pullquote_border_width' => '3',
+        'pullquote_transform' => 'uppercase',
+        'pullquote_line_height' => 48,
+        'pullquote_tracking' => 0,
 
-		'monospaced_font' => 'Menlo-Regular',
-		'monospaced_size' => 16,
-		'monospaced_color' => '#4f4f4f',
-		'monospaced_line_height' => 20,
-		'monospaced_tracking' => 0,
-        'pullquote_font'  				=> 'AvenirNext-Bold',
-		'pullquote_size'  				=> 48,
-		'pullquote_color' 				=> '#53585F',
-		'pullquote_border_color' 	=> '#53585F',
-		'pullquote_border_style' 	=> 'solid',
-		'pullquote_border_width' 	=> '3',
-		'pullquote_transform'			=> 'uppercase',
-		'pullquote_line_height' 	=> 22,
-        'pullquote_top_margin' 	=>  20,
-        'pullquote_bottom_margin' 	=> 20,
+        'monospaced_font' => 'Menlo-Regular',
+        'monospaced_size' => 16,
+        'monospaced_color' => '#4f4f4f',
+        'monospaced_line_height' => 20,
+        'monospaced_tracking' => 0,
+        'pullquote_top_margin' => 20,
+        'pullquote_bottom_margin' => 20,
 
 
-		'component_alerts' => 'none',
-		'json_alerts' => 'warn',
-        'component_alerts' 				=> 'none',
+        'component_alerts' => 'none',
+        'json_alerts' => 'warn',
 
-		'use_remote_images' => 'no',
-		'full_bleed_images' => 'no',
-		'html_support' => 'no',
+        'use_remote_images' => 'no',
+        'full_bleed_images' => 'no',
+        'html_support' => 'no',
 
-		// This can either be gallery or mosaic.
-		'gallery_type' => 'gallery',
+        // This can either be gallery or mosaic.
+        'gallery_type' => 'gallery',
+        'gallery_caption_font' => 'AvenirNext-Medium',
+        'gallery_caption_size' => 14,
+        'gallery_caption_line_height' => 16,
+        'gallery_caption_text_color' => '#000000',
+        'gallery_caption_link_font_name' => 'AvenirNext-Medium',
+        'gallery_caption_link_text_color' => '#000000',
+        'gallery_caption_link_underline' => 'yes',
+        // Ad settings
+        'enable_advertisement' => 'yes',
+        'ad_frequency' => 1,
+        'ad_margin' => 15,
 
-		'gallery_type'   					=> 'gallery',
-        'gallery_caption_font'              => 'AvenirNext-Medium',
-        'gallery_caption_size'              => 14,
-        'gallery_caption_line_height'       => 16,
-        'gallery_caption_text_color'        => '#000000',
-        'gallery_caption_link_font_name'    => 'AvenirNext-Medium',
-        'gallery_caption_link_text_color'   => '#000000',
-        'gallery_caption_link_underline'    => 'yes',
-		// Ad settings
-		'enable_advertisement' => 'yes',
-		'ad_frequency' => 1,
-		'ad_margin' => 15,
+        // Default component order
+        'meta_component_order' => array('breadcrumbcover', 'title', 'byline')
+    );
+    //	'meta_component_order' => array( 'cover', 'title', 'byline' ),
+    //'meta_component_order' 		=> array( 'cover', 'title', 'divider', 'byline','divider' ),
 
-		// Default component order
-		'meta_component_order' => array( 'cover', 'title', 'byline' ),
-	);
-		//'meta_component_order' 		=> array( 'cover', 'title', 'divider', 'byline','divider' ),
-		'meta_component_order' 		=> array( 'breadcrumbcover', 'title','byline' ),
-	);  //'gallery','video','cover', 'divider', 'logo', 'byline','divider'
+    //'gallery','video','cover', 'divider', 'logo', 'byline','divider'
 
 	/**
 	 * Magic method to get a computed or stored settings value.
@@ -287,10 +264,7 @@ class Settings {
 	 */
 	public function __set( $name, $value ) {
 		$this->_settings[ $name ] = $value;
-	public function all() {
-		return $this->settings;
 	}
-
 	// COMPUTED SETTINGS are those settings which are not shown in the frontend
 	// and cannot be changed directly, instead, they are a logical representation
 	// of a combination of other settings. For example, if the body orientation
@@ -358,9 +332,9 @@ class Settings {
 	 * @access public
 	 * @return int The number of columns for the body to span.
 	 */
-	public function body_column_span() {
-		return ( 'center' === $this->body_orientation ) ? 7 : 6;
-	}
+	//public function body_column_span() {
+	//	return ( 'center' === $this->body_orientation ) ? 7 : 6;
+	//}
 
 	/**
 	 * Get the left margin column offset.
@@ -404,9 +378,9 @@ class Settings {
 	 * @access public
 	 * @return int The number of layout columns to use.
 	 */
-	public function layout_columns() {
-		return ( 'center' === $this->body_orientation ) ? 9 : 7;
-	}
+	//public function layout_columns() {
+	//	return ( 'center' === $this->body_orientation ) ? 9 : 7;
+	//}
 
 	/**
 	 * Set a setting.

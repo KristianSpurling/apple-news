@@ -173,15 +173,8 @@ class Body extends Component {
 			'lineHeight' => intval( $this->get_setting( 'body_line_height' ) ),
 			'textColor' => $this->get_setting( 'body_color' ),
 			'linkStyle' => array(
-				'textColor' => $this->get_setting( 'body_link_color' )
-			'textAlignment' 			=> 'left',
-			'fontName'      			=> $this->get_setting( 'body_font' ),
-			'fontSize'      			=> intval( $this->get_setting( 'body_size' ) ),
-			'lineHeight'    			=> intval( $this->get_setting( 'body_line_height' ) ),
-			'textColor'     			=> $this->get_setting( 'body_color' ),
-			'linkStyle'     			=> array(
 				'textColor' => $this->get_setting( 'body_link_color' ),
-                'underline' 	=> true,
+		        'underline' 	=> true,
 			),
 			'paragraphSpacingBefore' => 18,
 			'paragraphSpacingAfter' => 18,
